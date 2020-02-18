@@ -23,7 +23,7 @@ Address = 10.0.0.1/24, fd00::1/48
 ListenPort = 51820
 PrivateKey = $( cat server_public_key )
 EOF
-cat <<'EOF' > add-client.sh
+cat <<'EOF' > add-client
 #!/bin/bash
 
 # We read from the input parameter the name of the client
@@ -74,12 +74,11 @@ echo $OCTET_IP > /etc/wireguard/last_used_ip.var
 CLIENT_IP="$VPN_SUBNET$OCTET_IP/32"
 
 # Create a blank configuration file client 
-cat > /etc/wireguard/clients/$USERNAME/$USERNAME.conf << EOF
+cat > /etc/wireguard/clients/$USERNAME/$USERNAME.conf << \EOF
 [Interface]
 PrivateKey = $CLIENT_PRIVKEY
 Address = $CLIENT_IP
 DNS = $DNS
-
 
 [Peer]
 PublicKey = $SERVER_PUBLIC_KEY
@@ -90,7 +89,7 @@ PersistentKeepalive=25
 \EOF
 
 # Add new client data to the Wireguard configuration file
-cat >> /etc/wireguard/wg0.conf << EOF
+cat >> /etc/wireguard/wg0.conf << \EOF
 
 [Peer]
 PublicKey = $CLIENT_PUBLIC_KEY
@@ -112,6 +111,8 @@ cat ./$USERNAME.conf
 # Save QR config to png file
 qrencode -t png -o ./$USERNAME.png < ./$USERNAME.conf
 EOF
+sed 's/\\//g' add-client > add-client.sh
+rm -f add-client
 chmod 755 add-client.sh
 ln -s /etc/wireguard/add-client.sh /usr/bin/addwgclient
 firewall-cmd --permanent --zone=public --add-port=51820/udp
