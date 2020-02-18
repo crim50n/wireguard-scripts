@@ -114,5 +114,8 @@ qrencode -t png -o ./$USERNAME.png < ./$USERNAME.conf
 EOF
 chmod 755 add-client.sh
 ln -s /etc/wireguard/add-client.sh /usr/bin/addwgclient
-systemctl enable wgquick@wg0
-systemctl start wgquick@wg0
+firewall-cmd --permanent --zone=public --add-port=51820/udp
+firewall-cmd --permanent --zone=public --add-masquerade
+firewall-cmd --reload
+systemctl enable wg-quick@wg0.service
+systemctl start wg-quick@wg0.service
