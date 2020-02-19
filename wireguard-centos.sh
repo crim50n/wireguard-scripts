@@ -4,24 +4,30 @@ curl -o /etc/yum.repos.d/jdoss-wireguard-epel-7.repo https://copr.fedorainfraclo
 yum -y install wireguard-dkms wireguard-tools qrencode
 mkdir -p /etc/wireguard
 cd /etc/wireguard
+SUBNET4="10.4.0."
+SUBNET6="fd00:4::"
+SRVADDR4="10.4.0.1/24"
+SRVADDR6="fd00:4::1/48"
+LISTENPORT="51820"
+DNSSERVER="1.1.1.1"
 cat <<EOF > vpn_subnet.var
-10.0.0.
+$SUBNET4
 EOF
 cat <<EOF > dns.var
-1.1.1.1
+$DNSSERVER
 EOF
 cat <<EOF > last_used_ip.var
 1
 EOF
 cat <<EOF > endpoint.var
-$(curl https://ipinfo.io/ip):51820
+$(curl https://ipinfo.io/ip):$LISTENPORT
 EOF
 wg genkey | tee server_private_key | wg pubkey > server_public_key
 cat <<EOF > wg0.conf
 [Interface]
-Address = 10.0.0.1/24, fd00::1/48
-ListenPort = 51820
-PrivateKey = $( cat server_public_key )
+Address = $SRVADDR4, $SRVADDR6
+ListenPort = $LISTENPORT
+PrivateKey = $( cat server_private_key )
 EOF
 cat <<'EOF' > add-client
 #!/bin/bash
