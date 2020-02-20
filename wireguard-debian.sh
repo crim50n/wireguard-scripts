@@ -8,7 +8,7 @@ cd /etc/wireguard
 SUBNET4="10.4.0."
 SUBNET6="fd00:4::"
 SRVADDR4="10.4.0.1/24"
-SRVADDR6="fd00:4::1/48"
+SRVADDR6="fd00:4::1/64"
 LISTENPORT="51820"
 DNSSERVER="1.1.1.1, 2606:4700:4700::1111"
 ETHERINT="eth0"
@@ -87,7 +87,7 @@ OCTET_IP=$(($OCTET_IP+1))
 echo $OCTET_IP > /etc/wireguard/last_used_ip.var
 
 CLIENT_IP4="$VPN_SUBNET4$OCTET_IP/32"
-CLIENT_IP6="$VPN_SUBNET6$OCTET_IP/64"
+CLIENT_IP6="$VPN_SUBNET6$OCTET_IP/128"
 
 # Create a blank configuration file client 
 cat > /etc/wireguard/clients/$USERNAME/$USERNAME.conf << \EOF
