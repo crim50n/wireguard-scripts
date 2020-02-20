@@ -37,7 +37,7 @@ PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -A FORWARD -o wg0 -j ACC
 PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -D FORWARD -o wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o $ETHERINT -j MASQUERADE; ip6tables -D FORWARD -i wg0 -j ACCEPT; ip6tables -D FORWARD -o wg0 -j ACCEPT; ip6tables -t nat -D POSTROUTING -o $ETHERINT -j MASQUERADE
 PrivateKey = $( cat server_private_key )
 EOF
-cat <<'EOF' > add-client
+cat <<'EOF' > add-client.sh
 #!/bin/bash
 
 # We read from the input parameter the name of the client
@@ -127,10 +127,8 @@ cat ./$USERNAME.conf
 # Save QR config to png file
 qrencode -t png -o ./$USERNAME.png < ./$USERNAME.conf
 EOF
-sed 's/\\//g' add-client > add-client.sh
-rm -f add-client
-chmod 755 add-client.sh
-ln -s /etc/wireguard/add-client.sh /usr/bin/addwgclient
+sed 's/\\//g' add-client.sh > /usr/bin/addwgpeer
+chmod 755 /usr/bin/addwgpeer
 echo "net.ipv4.ip_forward = 1
 net.ipv6.conf.all.forwarding = 1" > /etc/sysctl.d/wg.conf
 sysctl --system
