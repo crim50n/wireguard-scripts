@@ -5,9 +5,9 @@ apt -y update
 apt -y install wireguard curl ufw qrencode
 mkdir -p /etc/wireguard
 cd /etc/wireguard
-SUBNET4="10.0.0"
+SUBNET4="10.0.0."
 SUBNET6="fd00::"
-SRVADDR4="10.0.01/24"
+SRVADDR4="10.0.0.1/24"
 SRVADDR6="fd00::1/64"
 LISTENPORT="51820"
 DNSSERVER="1.1.1.1, 2606:4700:4700::1111"
