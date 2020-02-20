@@ -241,6 +241,7 @@ stop() {
 	eend $?
 }
 EOF
+	chmod 755 /etc/init.d/wireguard.wg0
 	rc-update add wireguard.wg0 boot
 	echo "net.ipv4.ip_forward = 1
 	net.ipv6.conf.all.forwarding = 1" > /etc/sysctl.d/wg.conf
