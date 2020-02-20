@@ -5,10 +5,10 @@ apt -y update
 apt -y install wireguard curl ufw qrencode
 mkdir -p /etc/wireguard
 cd /etc/wireguard
-SUBNET4="10.4.0."
-SUBNET6="fd00:4::"
-SRVADDR4="10.4.0.1/24"
-SRVADDR6="fd00:4::1/64"
+SUBNET4="10.0.0"
+SUBNET6="fd00::"
+SRVADDR4="10.0.01/24"
+SRVADDR6="fd00::1/64"
 LISTENPORT="51820"
 DNSSERVER="1.1.1.1, 2606:4700:4700::1111"
 ETHERINT="eth0"
@@ -134,6 +134,7 @@ ln -s /etc/wireguard/add-client.sh /usr/bin/addwgclient
 echo "net.ipv4.ip_forward = 1
 net.ipv6.conf.all.forwarding = 1" > /etc/sysctl.d/wg.conf
 sysctl --system
+systemctl enable --now ufw
 ufw allow 22/tcp
 ufw allow $LISTENPORT/udp
 ufw enable
