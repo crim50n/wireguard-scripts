@@ -194,8 +194,7 @@ AllowedIPs = $CLIENT_IP4, $CLIENT_IP6
 \EOF
 
 # Restart Wireguard
-systemctl stop wg-quick@wg0
-systemctl start wg-quick@wg0
+service wireguard.wg0 restart
 
 # Show QR config to display
 qrencode -t ansiutf8 < ./$USERNAME.conf
