@@ -34,7 +34,7 @@ Address = $SRVADDR4, $SRVADDR6
 ListenPort = $LISTENPORT
 PrivateKey = $( cat server_private_key )
 EOF
-cat <<'EOF' > add-client
+cat <<'EOF' > add-client.sh
 #!/bin/bash
 
 # We read from the input parameter the name of the client
@@ -124,10 +124,8 @@ cat ./$USERNAME.conf
 # Save QR config to png file
 qrencode -t png -o ./$USERNAME.png < ./$USERNAME.conf
 EOF
-sed 's/\\//g' add-client > add-client.sh
-rm -f add-client
-chmod 755 add-client.sh
-ln -s /etc/wireguard/add-client.sh /usr/bin/addwgclient
+sed 's/\\//g' add-client.sh > /usr/bin/addwgpeer
+chmod 755 /usr/bin/addwgpeer
 systemctl enable --now firewalld
 firewall-cmd --permanent --zone=public --add-port=51820/udp
 firewall-cmd --permanent --zone=public --add-masquerade
