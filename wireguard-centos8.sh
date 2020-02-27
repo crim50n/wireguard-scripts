@@ -1,7 +1,7 @@
 #!/bin/bash
-yum install epel-release
-yum config-manager --set-enabled PowerTools
-yum copr enable jdoss/wireguard
+yum -y install epel-release
+yum -y config-manager --set-enabled PowerTools
+yum -y copr enable jdoss/wireguard
 yum -y install firewalld wireguard-dkms wireguard-tools qrencode
 mkdir -p /etc/wireguard
 cd /etc/wireguard
